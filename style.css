@@ -3,11 +3,17 @@ body {
     font-family: sans-serif;
 }
 
-/*#rootpane {
-    overflow: scroll;
-    white-space: nowrap;
-    height: 99%;
-}*/
+#headpane {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    background-color: rgba(199, 255, 255, 0.555);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: large;
+
+}
 
 .branchpanel {
     display: inline-block;
@@ -34,8 +40,12 @@ textarea {
     height: 50px;
     margin-left: 219px;
 }
-
-
+body > .branchpanel > hr {
+    display:none;
+}
+body > .branchpanel > #branch_container > .topflow:first-of-type {
+    display:none;
+}
 #branch_container {
     font-size: 0;
     display: inline-block;
@@ -91,3 +101,33 @@ br {
     transition: opacity 0.5s;
 }
     
+#download {
+    position: fixed;
+    background-color: #1d9ebe;
+    color: white;
+    font-weight: bold;
+    width: 90px;
+    height: 30px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    border-radius: 5px;
+    top: 13px;
+    left: 20px;
+    z-index: 9999;
+    cursor: pointer;
+}
+#upload {
+    position: fixed;
+    width: 90px;
+    height: 30px;
+    background-color: #1d9ebe;
+    color: white;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    border-radius: 5px;
+    top: 13px;
+    left: 110px;
+    z-index: 9999;
+    cursor: pointer;
+}

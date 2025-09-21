@@ -1,13 +1,13 @@
 
 import { showToast } from "./script.js";
-export function initBranch(parent) {
+export function initBranch(parent, text="", childs = []) {
     const branch = {
         parent,
         children: [],
         panel: null,
         container: null,
-        text: "",
-        textarea: "",
+        text,
+        textarea: null,
         generateUI: () => {
             branch.panel = document.createElement("div");
             branch.panel.className = "branchpanel";
@@ -16,6 +16,7 @@ export function initBranch(parent) {
             branch.container.innerHTML = TUI;
             branch.textarea = document.createElement("textarea")
             branch.textarea.placeholder = "Type your story timeline here..."
+            branch.textarea.value = branch.text;
             branch.container.appendChild(branch.textarea)
             branch.panel.appendChild(document.createElement("hr"))
             branch.panel.appendChild(branch.container);
@@ -57,7 +58,6 @@ export function initBranch(parent) {
                 }
 
             }
-
             branch.container.appendChild(addButton);
             branch.container.appendChild(delButton);
             branch.container.appendChild(saveButton);
@@ -69,28 +69,64 @@ export function initBranch(parent) {
             
             branch.panel.appendChild(document.createElement("br"))
             parent.panel.appendChild(branch.panel);
-            if (parent == null) return;
             parent.children.push(branch);
+            if (childs.length > 0) {
+                childs.map(c => initBranch(branch, c.text, c.children).generateUI());
+            }
         }
     }
     return branch;
 }
 const geralt = (branch) => {
-
-
-    //return ({text: "text"})
+    return ({
+        text: branch.text,
+        children: branch.children.map(c => geralt(c))
+    })
 };
-let original;
-const download = {}
-export const generateUITest = () => {
-    let parent = {
+const upload = (text) => {
+    let branch = JSON.parse(text);
+    original.panel.remove();
+    original = initBranch(parent, branch.text, branch.children)
+    original.generateUI();
+}
+let parent = {
         text: "\u001f",
         children:[],
         panel: document.body//.getElementById("rootpane")
     }
+let original;
+
+export const generateUITest = () => {
     original = initBranch(parent);
     original.generateUI();
 
 }
 
 const TUI = `<div class="topflow"></div>`;
+document.getElementById("download").onclick = () => {
+    let filename = prompt("Enter the title: ");
+    if (filename == null) return;
+    let text = JSON.stringify(geralt(original));
+    let blob = new Blob([text], { type: "text/plain" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename + ".txt";
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
+const fileload = document.getElementById("fileload");
+document.getElementById("upload").onclick = () => {
+    document.getElementById("fileload").click();
+    
+}
+fileload.addEventListener("change", () => {
+    const file = fileload.files[0]; // first selected file
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        console.log(e.target.result)
+        upload(e.target.result); // file contents
+    };
+    reader.readAsText(file);
+})

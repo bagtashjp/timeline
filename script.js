@@ -1,7 +1,7 @@
 import { generateUITest } from "./branch.js";
 generateUITest();
-document.getElementsByTagName("hr")[0].style.display = "none";
-document.getElementsByClassName("topflow")[0].style.display = "none";
+//document.getElementsByTagName("hr")[0].style.display = "none";
+//document.getElementsByClassName("topflow")[0].style.display = "none";
 
 
 export function showToast(message) {
